@@ -1,24 +1,29 @@
-RaphaGraph
-==========
+<a href="https://raphagraph.arbol.org/documentation.html" target="_blank">View Documentation</a>.
 
-High Variable Pie and Bar Charts for RaphaelJs
+Example initialization:
 
-Currently three graphs that can be initialized:
-
-    var N = new Nightengale(options); // Single Nightengale style pie chart
-    var aN = new aNightengales(options); // Multiple Nightengale style pie chart
-    var rd = new RussianDolls(options); // Single bar graph
+`` var rg = new RaphaGraph({
+		container:'container',
+		type:'pie',
+		variables:'concentric',
+		additive:true,
+		h:425,
+		aData:[
+			[
+				[.36,.12],
+				[.28,.10]
+			],[
+				[.41, .08],
+				[.23, .05]
+			],[
+				[.84, .23],
+				[.52, .25]
+			]
+		],
+		names:{group:['Indian', 'Pacific', 'Atlantic'], cat:['Northern Hemisphere', 'Southern Hemisphere'], var:['0-700m', '700-2000m']},
+		title:'Thermostatic Component of Sea Level Change',
+		subtitle:'by Ocean, Hemisphere, and Ocean Depth',
+		units:'mm/year'
+	});``
 	
-Each Nightengale pie chart can express up to two dimensions: categories and variables. The aData option can be passed in array as:
-
-    [[val11, val12, val13], [val21, val22, val23] , [val31, val32, val33]]
-	
-Additionally, if we wanted to render several Nightengale pie charts on the same paper, we could add a third dimension, with aData passed as such:
-
-    [
-		[[val11, val12, val13], [val21, val22, val23] , [val31, val32, val33]],
-		[[val11, val12, val13], [val21, val22, val23] , [val31, val32, val33]],
-		[[val11, val12, val13], [val21, val22, val23] , [val31, val32, val33]],
-		[[val11, val12, val13], [val21, val22, val23] , [val31, val32, val33]]
-	]
-
+View <a href="https://raphagraph.arbol.org/examples/concentric additive pies.html" target="_blank">result here</a>.

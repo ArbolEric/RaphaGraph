@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="../lib/jquery 1.9.1.min.js"></script>
+<script src="../lib/raphael 2.1.0.min.js"></script>
+<script src="../RaphaGraph.min.js"></script>
+<script src="../lib/google_prettify.js"></script>
+<style type="text/css">
+	body { padding:25px;background-color:#999999;color:white;font-family: Candara, Calibri, Segoe, "Segoe UI", Optima, Arial, sans-serif; }
+	/* desert scheme ported from vim to google prettify */
+	pre.prettyprint { display: block; background-color: #333 }
+	pre .nocode { background-color: none; color: #000 }
+	pre .str { color: #ffa0a0 } /* string  - pink */
+	pre .kwd { color: #f0e68c; font-weight: bold }
+	pre .com { color: #87ceeb } /* comment - skyblue */
+	pre .typ { color: #98fb98 } /* type    - lightgreen */
+	pre .lit { color: #cd5c5c } /* literal - darkred */
+	pre .pun { color: #fff }    /* punctuation */
+	pre .pln { color: #fff }    /* plaintext */
+	pre .tag { color: #f0e68c; font-weight: bold } /* html/xml tag    - lightyellow */
+	pre .atn { color: #bdb76b; font-weight: bold } /* attribute name  - khaki */
+	pre .atv { color: #ffa0a0 } /* attribute value - pink */
+	pre .dec { color: #98fb98 } /* decimal         - lightgreen */
+
+	/* Specify class=linenums on a pre to get line numbering */
+	ol.linenums { margin-top: 0; margin-bottom: 0; color: #AEAEAE } /* IE indents via margin-left */
+	li.L0,li.L1,li.L2,li.L3,li.L5,li.L6,li.L7,li.L8 { list-style-type: none }
+	/* Alternate shading for lines */
+	li.L1,li.L3,li.L5,li.L7,li.L9 { }
+
+	@media print {
+	  pre.prettyprint { background-color: none }
+	  pre .str, code .str { color: #060 }
+	  pre .kwd, code .kwd { color: #006; font-weight: bold }
+	  pre .com, code .com { color: #600; font-style: italic }
+	  pre .typ, code .typ { color: #404; font-weight: bold }
+	  pre .lit, code .lit { color: #044 }
+	  pre .pun, code .pun { color: #440 }
+	  pre .pln, code .pln { color: #000 }
+	  pre .tag, code .tag { color: #006; font-weight: bold }
+	  pre .atn, code .atn { color: #404 }
+	  pre .atv, code .atv { color: #060 }
+	}
+	#logo h1 {
+		display:inline-block;
+		margin-left:200px;
+	}
+</style>
+</head>
+<body>
+<div id="logo">
+	<a href="http://www.arbol.org" target="_blank"><img style="border:0px;" src="https://s3-us-west-1.amazonaws.com/arbol-blog/logos/logo-large-grey.png" /></a>
+	<h1 style="inline-block">RaphaGraph</h1>
+</div>
+	<div style="width:60%;" id="container"></div>
+	<pre class="prettyprint">
+		var rg = new RaphaGraph({
+			container:'container',
+			aData: [6, 5, 7],
+			names:{group:['Group 1', 'Group 2', 'Group 3']}
+		});
+	</pre>
+<script>	
+$(document).ready(function(){
+	var rg = new RaphaGraph({
+		container:'container',
+		aData: [6, 5, 7],
+		names:{group:['Group 1', 'Group 2', 'Group 3']}
+	});
+});
+</script>
+</body>
+</html>

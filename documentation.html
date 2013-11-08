@@ -1,0 +1,839 @@
+<html>
+<head>
+	<script src="./lib/jquery 1.9.1.min.js"></script>
+	<script src="./lib/raphael 2.1.0.min.js"></script>
+	<script src="./RaphaGraph.min.js"></script>
+	<style type="text/css">
+		body { padding:25px;background-color:#999999;color:white;font-family: Candara, Calibri, Segoe, "Segoe UI", Optima, Arial, sans-serif; }
+		.option { 
+			color:black;
+			background-color:#BABABA; 
+			padding:4px 6px;
+			margin-bottom:6px;
+		}
+		.option h4 { margin:2px 0px; }
+		.def { margin:5px 0px 10px 10px; }
+		div.default { margin:5px 0px 5px 45px; }
+		span.default { 
+			background-color:rgb(255,189,35);
+			border-radius:3px;
+			font-weight:bold;
+			color:white;
+			padding:2px 3px;
+			margin-right:8px;
+		}
+		span.possible { 
+			background-color:rgb(61,147,33);
+			border-radius:3px;
+			font-weight:bold;
+			color:white;
+			padding:2px 3px;
+			margin-right:8px;
+		}
+		span.examples { 
+			background-color:rgb(0,128,166);
+			border-radius:3px;
+			font-weight:bold;
+			color:white;
+			padding:2px 3px;
+			margin-right:8px;
+		}
+		.default {  }
+		.option ul {
+			list-style-type:none;
+		}
+		.option li {
+			display:inline-block;
+			padding:2px 3px;
+			margin:1px;
+		}
+		.code {
+			font-weight:bold;
+			font-style:italic;
+		}
+	</style>
+</head>
+<body>
+
+<h1>RaphaGraph</h1>
+<div>RaphaGraph is a graphing library built on the <a target="_blank" href="http://raphaeljs.com/">RaphaelJs library</a>. As of now, it includes a number of options for different bar and pie charts, as well as increased variable depth using animated <a href="#frames">frames</a>. The <a href="./examples/concentric additive pies.html" target="_blank">example below</a> demonstrates its capabilities:</div>
+
+<div id="container"></div>
+
+Below is a list of <a href="#options">options</a> as well as <a href="#methods">methods</a> related to frames.
+
+<h2 id="options">Options</h2>
+
+<h3>Basic</h3>
+<div class="option">	
+	<h4 id="aData">aData</h4>
+	<div class="def">
+		An Array of numbers or Arrays that defines the data to be represented. If <a href="#groups">groups</a> set to true, there can be up to three depth levels of data. Otherwise, there can be only two. Groups will be the first level, categories will be the second level, and variables will be the third level. aData can thus be passed as [[[1,2,3], [4,5,6], [7,8,9], [10,11,12]], [[1,2,3], [4,5,6], [7,8,9], [10,11,12]]]. In this example there are two groups, four categories, and three variables. 
+	</div>
+	<div class="default"><span class="default">Default</span>undefined</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li>Array of Arrays</li>
+		<li>Array of numbers</li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/basic bar.html">Basic Bar</a></li>
+		<li><a target="_blank" href="./examples/concentric additive pies.html">Concentric Additive Pies</a></li>
+		<li><a target="_blank" href="./examples/grouped pies.html">Grouped Pies</a></li>
+		<li><a target="_blank" href="./examples/basic bar.html">Framed Non-Additive Bar</a></li>
+		<li><a target="_blank" href="./examples/framed pies - fnPre.html">Framed Pies</a></li>
+	</ul>
+</div>
+<div class="option">	
+	<h4 id="container">container</h4>
+	<div class="def">
+		The id of the html element where the Raphael svg paper will be inserted. 
+	</div>
+	<div class="default"><span class="default">Default</span>undefined</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li>String</li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/basic bar.html">Basic Bar</a></li>
+	</ul>
+</div>
+<div class="option">	
+	<h4 id="h">h</h4>
+	<div class="def">
+		The height in pixels of the Raphael paper to be created for the graph.
+	</div>
+	<div class="default"><span class="default">Default</span>.75*options.w</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li>number</li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/concentric additive pies.html">Concentric Additive Pies - h passed</a></li>
+		<li><a target="_blank" href="./examples/grouped pies.html">Grouped Pies - h not passed</a></li>
+		<li><a target="_blank" href="./examples/additive bar.html">Additive Bar - h not passed</a></li>
+	</ul>
+</div>
+<div class="option">	
+	<h4 id="names">names</h4>
+	<div class="def">
+		An object with group, cat, and var properties, each with an Array of names for the given data levels. For the example for <a href="#aData">aData</a> above, we could pass {group:['Dogs', 'Cats'], cat:['brown', 'white', 'black', 'mixed'], var:['big', 'medium', 'small']}. Required attributes depend on depth of <a href="#aData">aData</a>, <a href="#groups">groups</a> setting, and <a href="#type">type</a> of graph.
+	</div>
+	<div class="default"><span class="default">Default</span>{}</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li>Object with group, cat, and var properties</li>
+	</ul>
+	<ul class="examples">
+		<li><a target="_blank" href="./examples/concentric additive pie.html">Basic Bar</a></li>
+		<li><a target="_blank" href="./examples/additive bar - fnClick.html">Additive Bar</a></li>
+		<li><a target="_blank" href="./examples/concentric additive pie.html">Non-Grouped Pie</a></li>
+		<li><a target="_blank" href="./examples/concentric additive pies.html">Grouped Pies</a></li>
+		
+	</ul>
+</div>
+<div class="option">	
+	<h4 id="w">w</h4>
+	<div class="def">
+		The width in pixels of the Raphael paper to be created for the graph.
+	</div>
+	<div class="default"><span class="default">Default</span>the width of your HTML container element</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li>number</li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/additive bar.html">Additive Bar - w passed without h</a></li>
+		<li><a target="_blank" href="./examples/single radial pie.html">Radial Pie - w passed with h</a></li>
+	</ul>
+</div>
+
+<h3>Title Options</h3>
+<div class="option">	
+	<h4 id="subtitle">subtitle</h4>
+	<div class="def">Gives chart sub-title. Omit or pass <span class="code">false</span> for no sub-title.</div>
+	<div class="default"><span class="default">Default</span>false</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li>String</li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/non-additive bar.html">Bar - subtitle passed</a></li>
+		<li><a target="_blank" href="./examples/concentric pies.html">Grouped Pies - subtitle passed</a></li>
+		<li><a target="_blank" href="./examples/grouped pies.html">Grouped Pies - no subtitle passed</a></li>
+	</ul>
+</div>
+<div class="option">	
+	<h4 id="subTitleAttr">subTitleAttr</h4>
+	<div class="def">Gives chart sub-title. Omit or pass <span class="code">false</span> for no sub-title.</div>
+	<div class="default"><span class="default">Default</span>{}</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li><a target="_blank" href="http://raphaeljs.com/reference.html#Element.attr">Raphael attribute Object</a></li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/additive bar - fonts oColors.html">Additive Bar Fonts</a></li>
+	</ul>
+</div>
+<div class="option">	
+	<h4 id="title">title</h4>
+	<div class="def">
+		Gives chart title. Omit or pass <span class="code">false</span> for no title.
+	</div>
+	<div class="default"><span class="default">Default</span>false</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li>String</li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/basic bar.html">No Title</a></li>
+		<li><a target="_blank" href="./examples/grouped pies.html">Title Passed</a></li>
+	</ul>
+</div>
+<div class="option">	
+	<h4 id="titleAttr">titleAttr</h4>
+	<div class="def">Attribute object passed into the attribute method of the title's Raphael text element.</div>
+	<div class="default"><span class="default">Default</span>{'font-size':16}</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li><a target="_blank" href="http://raphaeljs.com/reference.html#Element.attr">Raphael attribute Object</a></li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/additive bar - fonts oColors.html">Additive Bar Fonts</a></li>
+	</ul>
+</div>
+<div class="option">	
+	<h4 id="xLabelTitle">xLabelTitle</h4>
+	<div class="def">Relevant only to bar charts. Attribute object for x-axis title. Extends <a href="#textAttr">textAttr</a>.</div>
+	<div class="default"><span class="default">Default</span>{'font-size':16}</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li><a target="_blank" href="http://raphaeljs.com/reference.html#Element.attr">Raphael attribute Object</a></li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/additive bar - fonts oColors.html">Additive Bar Fonts</a></li>
+	</ul>
+</div>
+<div class="option">	
+	<h4 id="yLabelTitle">yLabelTitle</h4>
+	<div class="def">Relevant only to bar charts. Attribute object for x-axis title. Extends <a href="#textAttr">textAttr</a>.</div>
+	<div class="default"><span class="default">Default</span>{'font-size':16}</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li><a target="_blank" href="http://raphaeljs.com/reference.html#Element.attr">Raphael attribute Object</a></li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/additive bar - fonts oColors.html">Additive Bar Fonts</a></li>
+	</ul>
+</div>
+
+<h3>Chart Styles</h3>
+<div class="option">	
+	<h4 id="additive">additive</h4>
+	<div class="def">Determines how category totals are calculated. If set to true, category totals are the sum of the category array. Otherwise, the first value in the array is assumed as the total. This impacts chart rendering in the following ways:
+		<ul>
+			<li><span class="code">type:'bar', additive:true</span> stacked bar graph</li><br/>
+			<li><span class="code">type:'bar', additive:false</span> variable data is represented as a set of overlaying bars of decreasing width</li>
+			<li><span class="code">type:'pie', variables:'radial', additive:true, categories:'wedges'</span> category totals are used to create an inner pie chart with an outer ring, with each inner pie slice divided into smaller wedges representing variables</li>
+			<li><span class="code">type:'pie', variables:'radial', additive:true, categories:'rings'</span> each category is represented as a concentric ring on the pie graph. Those rings are each divided into smaller wedges representing variables</li>
+			<li><span class="code">type:'bar', variables:'concentric', additive:true</span> each category is represented as a pie slice divided concentrically. Each slice of the larger slice represents the variables scaled by area (not length).</li>
+			<li><span class="code">type:'bar', variables:'concentric', additive:false</span> the category totals are used to create an underlying bar chart. Every variable within each category is then overlaid as a wedge scaled based on width. You may, therefore, get some wedges extending beyond the radius of the category total.</li>
+		</ul>
+	</div>
+	<div class="default"><span class="default">Default</span>false</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li>true</li>
+		<li>false</li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/additive bar - fnClick.html">Additive Bar</a></li>
+		<li><a target="_blank" href="./examples/non-additive bar.html">Non-Additive Bar</a></li>
+		<li><a target="_blank" href="./examples/non-additive pie - fnClick.html">Non-Additive Pie</a></li>
+		<li><a target="_blank" href="./examples/concentric additive pies.html">Additive Pies</a></li>
+	</ul>
+</div>
+<div class="option">	
+	<h4 id="animate">animate</h4>
+	<div class="def">If set to true it will animate the data sets in a pre-determined way. It uses Raphael's <a target="_blank" href="#http://raphaeljs.com/reference.html#Element.animate">Element.animate</a> to execute the animations. This option is changed to false for graphs with <a href="#frames">frames</a> not set to false or <a href="#minMax">minMax set to true</a>. </div>
+	<div class="default"><span class="default">Default</span>true</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li>true</li>
+		<li>false</li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/additive bar - fnClick.html">Additive Bar with Animation</a></li>
+		<li><a target="_blank" href="./examples/non-additive bar.html">Non-Additive Bar with Animation</a></li>
+		<li><a target="_blank" href="./examples/minMax bars.html">Bar No Animation</a></li>
+		<li><a target="_blank" href="./examples/grouped pies.html">Pies No Animation</a></li>
+		<li><a target="_blank" href="./examples/concentric additive pies.html">Pies with Animation</a></li>
+	</ul>
+</div>
+<div class="option">	
+	<h4 id="animationLength">animationLength</h4>
+	<div class="def">The number of milliseconds it takes for the each animation to take place. </div>
+	<div class="default"><span class="default">Default</span>1000</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li>number</li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/single radial pie.html">Animation Length 750ms</a></li>
+	</ul>
+</div>
+<div class="option">	
+	<h4 id="categories">categories</h4>
+	<div class="def">Only relevant for <a href="#variables">radial-variable</a> pie charts. Determines whether categories are rendered as concentric rings or sub-divided into smaller wedges.
+	</div>
+	<div class="default"><span class="default">Default</span>'wedges'</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li>'wedges'</li>
+		<li>'rings'</li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/single radial pie.html">'wedges'</a></li>
+		<li><a target="_blank" href="./examples/single radial pie - rings.html">'rings'</a></li>
+	</ul>
+</div>
+<div class="option">	
+	<h4 id="groups">groups</h4>
+	<div class="def">
+		Changes position of variables on charts. On a bar chart this will create separate labels along the x-axis for each array of first level data. On a pie chart, this will actually create an individual pie chart of each array of first level data. See <a target="_blank" href="#">aData</a> for more.
+	</div>
+	<div class="default"><span class="default">Default</span>true</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li>true</li>
+		<li>false</li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/single radial pie.html">Non-Grouped Pie</a></li>
+		<li><a target="_blank" href="./examples/grouped pies.html">Grouped Pies</a></li>
+		<li><a target="_blank" href="./examples/non-grouped bar.html">Non-Grouped Pie</a></li>
+		<li><a target="_blank" href="./examples/basic bar.html">Grouped Pie</a></li>
+	</ul>
+</div>
+<div class="option">	
+	<h4 id="minMax">minMax</h4>
+	<div class="def">Currently, only relevant for bar charts with additive set to false. If minMax set to true, variables are represented as arrays <span class="code">[min, max]</span> where min and max are both numbers. Bars will then be rendered as solid up to the min value and fade to white at the max value. <a href="#animate">animate</a> and <a href="#additive">additive</a> both must be set to false if minMax is set to true.</div>
+	<div class="default"><span class="default">Default</span>false</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li>true</li>
+		<li>false</li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/minMax Bars.html">Gradient Bars</a></li>
+	</ul>
+</div>
+<div class="option">	
+	<h4 id="type">type</h4>
+	<div class="def">
+		Defines the general graph type for the data.
+	</div>
+	<div class="default"><span class="default">Default</span>'bar'</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li>'bar'</li>
+		<li>'pie'</li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/single radial pie.html">Non-Grouped Pie</a></li>
+		<li><a target="_blank" href="./examples/grouped pies.html">Grouped Pies</a></li>
+		<li><a target="_blank" href="./examples/non-grouped bar.html">Non-Grouped Bar</a></li>
+		<li><a target="_blank" href="./examples/basic bar.html">Grouped Bar</a></li>
+	</ul>
+</div>
+<div class="option">	
+	<h4 id="variables">variables</h4>
+	<div class="def">Only relevant for pie charts. Determines whether variables divide each category concentrically or radially.
+	</div>
+	<div class="default"><span class="default">Default</span>'radial'</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li>'concentric'</li>
+		<li>'radial'</li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/concentric additive pies.html">Concentric Pies</a></li>
+		<li><a target="_blank" href="./examples/single radial pie.html">Radial Pie</a></li>
+	</ul>
+</div>
+
+<h3>Data Colors</h3>
+<div class="option">	
+	<h4 id="aColors">aColors</h4>
+	<div class="def">An array of colors applied according to <a target="_blank" href="#">color-scope</a>. Used only if <a target="_blank" href="#">oColors</a> is not passed.</div>
+	<div class="default"><span class="default">Default</span>
+		[
+			'rgb(255,189,35)',
+			'rgb(61,147,33)',
+			'rgb(0,128,166)',
+			'rgb(120,64,176)',
+			'rgb(236,48,48)',
+			'rgb(6,28,124)'
+		]
+	</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li>Array of color values</li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/additive bar - fnClick.html">Custom aColors</a></li>
+	</ul>
+</div>
+<div class="option">	
+	<h4 id="color-scope">color-scope</h4>
+	<div class="def">Determines how color values are assigned based on <a href="#aColors">aColors</a> or <a href="#oColors">oColors</a>. The <a href="#names">names</a> of the assigned scope will show up in the legend with their associated color. For a bar graph with groups set to true and only first level <a href="#aData">aData</a> depth, this automatically changes to groups.</div>
+	<div class="default"><span class="default">Default</span>'category'</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li>'group'</li>
+		<li>'cat'</li>
+		<li>'var'</li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/non-additive bar - no legend aColors.html">bar with 'var' color-scope</a></li>
+		<li><a target="_blank" href="./examples/basic bar.html">bar auto change to 'group' color-scope</a></li>
+		<li><a target="_blank" href="./examples/grouped pies.html">pies with default color-scope</a></li>
+		<li><a target="_blank" href="./examples/color-scope pies.html">pies with 'group' color-scope</a></li>
+	</ul>
+</div>
+<div class="option">	
+	<h4 id="gradient">gradient</h4>
+	<div class="def">Analogous to <a href="#color-scope">color-scope</a>. Once a color has been determined, it will whiten the color based on the index of the gradient scope.</div>
+	<div class="default"><span class="default">Default</span>'var'</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li>'group'</li>
+		<li>'cat'</li>
+		<li>'var'</li>
+		<li>false</li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/non-additive bar.html">bars default 'var' gradient</a></li>
+		<li><a target="_blank" href="./examples/single radial pie.html">pie with default 'var' gradient</a></li>
+		<li><a target="_blank" href="./examples/color-scope pies.html"> pies with 'cat' gradient</a></li>
+	</ul>
+</div>
+<div class="option">	
+	<h4 id="oColors">oColors</h4>
+	<div class="def">An object that assigns a color based on group, category, or variable names (as determined by <a target="_blank" href="#">color-scope</a>).</div>
+	<div class="default"><span class="default">Default</span>false</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li>false</li>
+		<li>Object with name-color pairs.</li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/non-additive bar.html">oColors passed I</a></li>
+		<li><a target="_blank" href="./examples/additive bar - fonts oColors.html">oColors passed II</a></li>
+	</ul>
+</div>
+
+<h3>Labels and Styles</h3>
+<!--<div class="option">	
+	<h4 id="crustAttr">crustAttr</h4>
+	<div class="def">Relevant only to pie charts. Attribute object for crust elements. Extends <a href="#dataAttr">dataAttr</a>.</div>
+	<div class="default"><span class="default">Default</span>{}</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li><a target="_blank" href="http://raphaeljs.com/reference.html#Element.attr">Raphael attribute Object</a></li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/non-additive bar.html">oColors passed I</a></li>
+		<li><a target="_blank" href="./examples/additive bar - fonts oColors.html">oColors passed II</a></li>
+	</ul>
+</div>
+<div class="option">	
+	<h4 id="dataAttr">dataAttr</h4>
+	<div class="def">Currently only relevant to pie charts. Attribute object for individual data elements (ie the wedges, crusts, rings, and circles that make up the chart). Any more specific text option will take precedence over values in this object (the objects are combined through jQuery extend).</div>
+	<div class="default"><span class="default">Default</span>{}</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li><a target="_blank" href="http://raphaeljs.com/reference.html#Element.attr">Raphael attribute Object</a></li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a href="#">Grouped pies sub-title</a></li>
+		<li><a href="#">Non-Grouped pie no sub-title</a></li>
+		<li><a href="#">Bar sub-title</a></li>
+		<li><a href="#">Bar no sub-title</a></li>
+	</ul>
+</div>-->
+<div class="option">	
+	<h4 id="legend">legend</h4>
+	<div class="def">Determines whether a legend will be created for the specific RaphaGraph.</div>
+	<div class="default"><span class="default">Default</span>true</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li>true</li>
+		<li>false</li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/basic bar.html">Legend</a></li>
+		<li><a target="_blank" href="./examples/non-additive bar - no legend aColors.html">No Legend</a></li>
+	</ul>
+</div>
+<div class="option">	
+	<h4 id="legendAttr">legendAttr</h4>
+	<div class="def">Extends <a href="#textAttr">textAttr</a> and passed to text elements in the legend.</div>
+	<div class="default"><span class="default">Default</span>{'font-size':16, cursor:'pointer'}</div>
+	<ul class="values">	
+		<li><span class="possible">Possible Values</span></li>
+		<li><a target="_blank" href="http://raphaeljs.com/reference.html#Element.attr">Raphael attribute Object</a></li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/basic bar.html">Default</a></li>
+		<li><a target="_blank" href="./examples/additive bar - fnClick.html">Custom</a></li>
+	</ul>
+</div>
+<div class="option">	
+	<h4 id="legendBoxAttr">legendBoxAttr</h4>
+	<div class="def">Attribute object for the legend outline.</div>
+	<div class="default"><span class="default">Default</span>{'stroke-width':1, color:'black'}</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li><a target="_blank" href="http://raphaeljs.com/reference.html#Element.attr">Raphael attribute Object</a></li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/basic bar">Default</a></li>
+		<li><a target="_blank" href="./examples/additive bar - fnClick.html">Custom</a></li>
+	</ul>
+</div>
+<div class="option">	
+	<h4 id="originAttr">originAttr</h4>
+	<div class="def">Relevant only to bar charts. Attribute object for grid line at y=0.</div>
+	<div class="default"><span class="default">Default</span>{'stroke-width':2, stroke:'black'}</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li><a target="_blank" href="http://raphaeljs.com/reference.html#Element.attr">Raphael attribute Object</a></li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/basic bar">Default</a></li>
+		<li><a target="_blank" href="./examples/additive bar - fnClick.html">Custom</a></li>
+	</ul>
+</div>
+<div class="option">	
+	<h4 id="sigFigs">sigFigs</h4>
+	<div class="def">This sets the number of significant figures that will shown in <a href="#fnHoverIn">hover boxes</a> and in subtitles for <a href="#groups">grouped</a> pie charts.</div>
+	<div class="default"><span class="default">Default</span>undefined</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li>Integer</li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/concentric additive pies.html">Default</a></li>
+		<li><a target="_blank" href="./examples/pies with sigFigs.html">One Significant Digit</a></li>
+	</ul>
+</div>
+<div class="option">	
+	<h4 id="textAttr">textAttr</h4>
+	<div class="def">The bottom level text attribute assigned to all <a href="http://raphaeljs.com/reference.html#Paper.text">Raphael text elements</a>. Any more specific text option will take precedence over values in this object (the objects are combined through jQuery extend).</div>
+	<div class="default"><span class="default">Default</span>
+		{
+			'font-family': '"Trebuchet MS", Helvetica, sans-serif',
+			'font-size':14
+		}
+	</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li><a target="_blank" href="http://raphaeljs.com/reference.html#Element.attr">Raphael attribute Object</a></li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/basic bar">Default</a></li>
+		<li><a target="_blank" href="./examples/additive bar - fonts oColors.html">Custom</a></li>
+	</ul>
+</div>
+<div class="option">	
+	<h4 id="units">units</h4>
+	<div class="def">Sets the units for a graph. They will be used in the <a href="#fnS">default function for the hover box</a>.</div>
+	<div class="default"><span class="default">Default</span>''</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li>String</li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/non-additive bar.html">Default</a></li>
+		<li><a target="_blank" href="./examples/grouped pies.html">Custom Pies</a></li>
+		<li><a target="_blank" href="./examples/additive bar - fnClick.html">Custom Bar</a></li>
+	</ul>
+</div>
+<!--<div class="option">	
+	<h4 id="wedgeAttr">wedgeAttr</h4>
+	<div class="def">Relevant only to pie charts. Attribute object for wedge elements. Extends <a href="#dataAttr">dataAttr</a>.</div>
+	<div class="default"><span class="default">Default</span>{}</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li><a target="_blank" href="http://raphaeljs.com/reference.html#Element.attr">Raphael attribute Object</a></li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a href="#">Grouped pies sub-title</a></li>
+		<li><a href="#">Non-Grouped pie no sub-title</a></li>
+		<li><a href="#">Bar sub-title</a></li>
+		<li><a href="#">Bar no sub-title</a></li>
+	</ul>
+</div>-->
+<div class="option">	
+	<h4 id="xLabels">xLabels</h4>
+	<div class="def">Relevant only to bar charts. Attribute object for x-axis labels. Extends <a href="#textAttr">textAttr</a>.</div>
+	<div class="default"><span class="default">Default</span>{'font-size':14}</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li><a target="_blank" href="http://raphaeljs.com/reference.html#Element.attr">Raphael attribute Object</a></li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/additive bar - fnClick.html">Custom Bar</a></li>
+	</ul>
+</div>
+<div class="option">	
+	<h4 id="yLabels">yLabels</h4>
+	<div class="def">Relevant only to bar charts. Attribute object for y-axis labels. Extends <a href="#textAttr">textAttr</a>.</div>
+	<div class="default"><span class="default">Default</span>{'font-size':14}</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li><a target="_blank" href="http://raphaeljs.com/reference.html#Element.attr">Raphael attribute Object</a></li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/non-grouped bar.html">Default</a></li>
+		<li><a target="_blank" href="./examples/additive bar - fnClick.html">Custom</a></li>
+	</ul>
+</div>
+
+<h3>Chart Event Callbacks</h3>
+<div class="option">	
+	<h4 id="fnClick">fnClick</h4>
+	<div class="def">This event fires when a data path element (ie a wedge, crust, bar, circle, or ring) is clicked. The context will be the Raphael element, which includes <a target="_blank" href="http://raphaeljs.com/reference.html#Element.data">Element.data</a> for color, val, group, cat, and var data as relevent.</div>
+	<div class="default"><span class="default">Default</span>function(){}</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li>Function()</li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/additive bar - fnClick.html">Custom I</a></li>
+		<li><a target="_blank" href="./examples/non-additive pie - fnClick.html">Custom II</a></li>
+	</ul>
+</div>
+<div class="option">	
+	<h4 id="fnHoverIn">fnHoverIn</h4>
+	<div class="def">This event fires when the mouse enters a data path element (ie a wedge, crust, bar, circle, or ring). The context will be the Raphael element, which includes <a target="_blank" href="http://raphaeljs.com/reference.html#Element.data">Element.data</a> for color, val, group, cat, and var data as relevent.</div>
+	<div class="default"><span class="default">Default</span><a href="https://github.com/ArbolEric/RaphaGraph/blob/master/src.js#L200" target="_blank">See source.</a></div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li>Function()</li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/basic bar.html">Default</a></li>
+		<li><a target="_blank" href="./examples/additive bar - fnClick.html">Custom I</a></li>
+		<li><a target="_blank" href="./examples/non additive bar.html">Custom II</a></li>
+</div>
+<div class="option">	
+	<h4 id="fnHoverOut">fnHoverOut</h4>
+	<div class="def">This event fires when the mouse leaves a data path element (ie a wedge, crust, bar, circle, or ring). The context will be the Raphael element, which includes <a target="_blank" href="http://raphaeljs.com/reference.html#Element.data">Element.data</a> for color, val, group, cat, and var data as relevent.</div>
+	<div class="default"><span class="default">Default</span><a href="https://github.com/ArbolEric/RaphaGraph/blob/master/src.js#L200" target="_blank">See source.</a></div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li>Function()</li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/basic bar.html">Default</a></li>
+		<li><a target="_blank" href="./examples/additive bar - fnClick.html">Custom I</a></li>
+		<li><a target="_blank" href="./examples/non additive bar.html">Custom II</a></li>
+	</ul>
+</div>
+<div class="option">	
+	<h4 id="fnS">fnS</h4>
+	<div class="def">This function is used by the default <a href="#fnHoverIn">fnHoverIn</a> to create a string for the hover box. The context will be the Raphael element, which includes <a target="_blank" href="http://raphaeljs.com/reference.html#Element.data">Element.data</a> for color, val, group, cat, and var data as relevent. Supports bold and italic html tags.</div>
+	<div class="default"><span class="default">Default</span><a href="https://github.com/ArbolEric/RaphaGraph/blob/master/src.js#L200" target="_blank">See source.</a></div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li>Function()</li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/basic bar.html">Default</a></li>
+		<li><a target="_blank" href="./examples/single radial pie.html">Custom</a></li>
+	</ul>
+</div>
+
+<h3>Framing</h3>
+<div class="option">	
+	<h4 id="frameInterval">frameInterval</h4>
+	<div class="def">The number of milliseconds between frame changes.</div>
+	<div class="default"><span class="default">Default</span>4000</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li>number</li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/framed radial pies - fnPost.html">Default</a></li>
+		<li><a target="_blank" href="./examples/framed pies - fnPre.html">2500ms</a></li>
+		<li><a target="_blank" href="./examples/framed non-additive bar - fnPost.html">5000ms</a></li>
+	</ul>
+</div>
+<div class="option">	
+	<h4 id="frames">frames</h4>
+	<div class="def">The frames option is passed an object with additional options for displaying different sets of data on the same graph. Before any graph is displayed, <a href="#frame-aData">frames.aData</a> is iterated and category totals, min and maxes are calculated. These numbers are used to determine scale, axes mins and maxes (bar), and outer dashed rings (pie). Each array within <a href="#frame-aData">frames.aData</a> is then rendered at the <a href="#frameInterval">frameInterval</a>. To control the frames, you can call rg.pause(), rg.stop(), or rg.resume() (where rg is an instance of RaphaGraph).</div>
+	<div class="default"><span class="default">Default</span>false</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li>false</li>
+		<li>Object</li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/framed radial pies - fnPost.html">Pies</a></li>
+		<li><a target="_blank" href="./examples/framed pies - fnPre.html">Radial Pies</a></li>
+		<li><a target="_blank" href="./examples/framed non-additive bar - fnPost.html">Non-Additive Bar</a></li>
+		<li><a target="_blank" href="./examples/framed additive bar - fnPost.html">Additive Bar</a></li>
+	</ul>
+</div>
+<div class="option">	
+	<h4 id="frames-aData">frames.aData</h4>
+	<div class="def">An array of data sets to iterate through at <a href="#frameInterval">frameInterval</a>. Each data set will be used to render graphs on the same set of axes.</div>
+	<div class="default"><span class="default">Default</span>undefined</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li>Array of Arrays</li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/framed radial pies - fnPost.html">Pies</a></li>
+		<li><a target="_blank" href="./examples/framed pies - fnPre.html">Radial Pies</a></li>
+		<li><a target="_blank" href="./examples/framed non-additive bar - fnPost.html">Non-Additive Bar</a></li>
+		<li><a target="_blank" href="./examples/framed additive bar - fnPost.html">Additive Bar</a></li>
+	</ul>
+</div>
+<div class="option">	
+	<h4 id="frames-fnPre">frames.fnPre</h4>
+	<div class="def">A function to be called before the frame changes. The context will be an Array of graph objects for the frame before the change. The graph objects will have title and total attributes.</div>
+	<div class="default"><span class="default">Default</span>function(){}</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li>Function()</li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/framed pies - fnPre.html">Radial Pies</a></li>
+	</ul>
+</div>
+<div class="option">	
+	<h4 id="frames-fnPost">frames.fnPost</h4>
+	<div class="def">A function to be called just after the frame changes. The context will be an Array of graph objects for the frame after the change. The graph objects will have title and total attributes.</div>
+	<div class="default"><span class="default">Default</span>function(){}</div>
+	<ul class="values">
+		<li><span class="possible">Possible Values</span></li>
+		<li>Function()</li>
+	</ul>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/framed radial pies - fnPost.html">Pies</a></li>
+		<li><a target="_blank" href="./examples/framed non-additive bar - fnPost.html">Non-Additive Bar</a></li>
+		<li><a target="_blank" href="./examples/framed additive bar - fnPost.html">Additive Bar</a></li>
+	</ul>
+</div>
+
+<h2 id="methods">Methods</h2>
+The following methods are relevant only for graphs with multiple frames. Internally, framing uses a Javascript setInterval to change the rendered data. The methods below will bypass or resume the setInterval callback and are useful for building a control interface for the frames. <b>rg</b> below indicates an instance of RaphaGraph. 
+<div class="option">	
+	<h4 id="pause">rg.pause</h4>
+	<div class="def">After this called, the setInterval will continue, however, its callback will not be executed. The rendered data will remain unchanged. This method can be followed up for a <a href="#resume">rg.resume</a> when ready. If passed an integer, it will jump to the data set in <a href="#frames-aData">frames.aData</a> Array and pause once it is rendered.</div>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/framed radial pies - fnPost.html">Pies</a></li>
+		<li><a target="_blank" href="./examples/framed pies - fnPre.html">Radial Pies</a></li>
+		<li><a target="_blank" href="./examples/framed non-additive bar - fnPost.html">Non-Additive Bar</a></li>
+		<li><a target="_blank" href="./examples/framed additive bar - fnPost.html">Additive Bar</a></li>
+	</ul>
+</div>
+<div class="option">	
+	<h4 id="resume">rg.resume</h4>
+	<div class="def">Once this is called, the setInterval callback will begin execution again. It may take another <a href="#frameInterval">frameInterval</a> to jump to the next frame. This method excepts no parameters.</div>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/framed radial pies - fnPost.html">Pies</a></li>
+		<li><a target="_blank" href="./examples/framed pies - fnPre.html">Radial Pies</a></li>
+		<li><a target="_blank" href="./examples/framed non-additive bar - fnPost.html">Non-Additive Bar</a></li>
+		<li><a target="_blank" href="./examples/framed additive bar - fnPost.html">Additive Bar</a></li>
+	</ul>
+</div>
+<div class="option">	
+	<h4 id="stop">rg.stop</h4>
+	<div class="def">When this method is called, the setInterval that changes the rendered data rendered from <a href="#frames-aData">frames.aData</a> is cleared. The frames will not resume and they will be stopped permanently at the current frame.</div>
+	<ul class="examples">
+		<li><span class="examples">Examples</span></li>
+		<li><a target="_blank" href="./examples/framed radial pies - fnPost.html">Pies</a></li>
+		<li><a target="_blank" href="./examples/framed pies - fnPre.html">Radial Pies</a></li>
+		<li><a target="_blank" href="./examples/framed non-additive bar - fnPost.html">Non-Additive Bar</a></li>
+		<li><a target="_blank" href="./examples/framed additive bar - fnPost.html">Additive Bar</a></li>
+	</ul>
+</div>
+<script>
+	$(document).ready(function(){
+	var rg = new RaphaGraph({
+		container:'container',
+		type:'pie',
+		variables:'concentric',
+		additive:true,
+		h:425,
+		aData:[
+			[
+				[.36,.12],
+				[.28,.10]
+			],[
+				[.41, .08],
+				[.23, .05]
+			],[
+				[.84, .23],
+				[.52, .25]
+			]
+		],
+		names:{group:['Indian', 'Pacific', 'Atlantic'], cat:['Northern Hemisphere', 'Southern Hemisphere'], var:['0-700m', '700-2000m']},
+		title:'Thermostatic Component of Sea Level Change',
+		subtitle:'by Ocean, Hemisphere, and Ocean Depth',
+		units:'mm/year',
+		animate:false
+	});
+});
+</script>
+</body>
+</html>
